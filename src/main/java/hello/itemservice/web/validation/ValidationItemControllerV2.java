@@ -10,6 +10,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -172,8 +173,14 @@ public class ValidationItemControllerV2 {
         log.info("target={}", bindingResult.getTarget());
 
         //검증 로직
+        //아래와 같은 로직이다. if문을 내부적으로 동작하기 때문에 편리하다.
+        //복잡조건을 제공하는 것은 아니니 유의
+//        ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "itemName", "required");
+
+
         if (!StringUtils.hasText(item.getItemName())) {
             bindingResult.rejectValue("itemName", "required");
+
         }
 
         if (item.getPrice() == null || item.getPrice() < 1000 || item.getPrice() > 1000000) {
@@ -188,7 +195,7 @@ public class ValidationItemControllerV2 {
         if (item.getPrice() != null && item.getQuantity() != null) {
             int resultPrice = item.getPrice() * item.getQuantity();
             if (resultPrice < 10000) {
-                bindingResult.reject("totalPriceMain",  new Object[]{10000, resultPrice}, null);
+                bindingResult.reject("totalPriceMin",  new Object[]{10000, resultPrice}, null);
             }
         }
 
