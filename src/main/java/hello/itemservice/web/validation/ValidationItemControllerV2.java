@@ -177,7 +177,6 @@ public class ValidationItemControllerV2 {
         //복잡조건을 제공하는 것은 아니니 유의
 //        ValidationUtils.rejectIfEmptyOrWhitespace(bindingResult, "itemName", "required");
 
-
         if (!StringUtils.hasText(item.getItemName())) {
             bindingResult.rejectValue("itemName", "required");
 
